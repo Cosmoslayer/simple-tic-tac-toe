@@ -230,5 +230,12 @@ files:
         TicTacToeTest().run_tests()
   learner_created: false
 feedback_link: https://hyperskill.org/projects/73/stages/401/implement#comment
-status: Unchecked
+status: Failed
+feedback:
+  message: "Wrong answer in test #1\n\nCan't parse result, should be one of the outcomes\
+    \ mentioned in description. \nYour last line: \"---------\"\n\nPlease find below\
+    \ the output of your program during this failed test.\nNote that the '>' character\
+    \ indicates the beginning of the input line.\n\n---\n\nEnter cells: > XXXOO__O_\n\
+    ---------\n| X X X |\n| O O _ |\n| _ O _ |\n---------"
+  time: Tue, 14 Sep 2021 13:53:05 UTC
 record: -1
