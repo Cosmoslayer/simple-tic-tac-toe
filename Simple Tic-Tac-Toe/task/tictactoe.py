@@ -63,15 +63,37 @@ def check_diagonal():
 
 
 create_board()
-if check_vertical() == "Both" or check_horizontal() == "Both" or abs(cells.count("X") - cells.count("O")) > 1:
-    print("Impossible")
-elif check_horizontal() is not None:
-    print(check_horizontal())
-elif check_vertical() is not None:
-    print(check_vertical())
-elif check_diagonal() is not None:
-    print(check_diagonal())
-elif "_" in cells:
-    print("Game not finished")
-else:
-    print("Draw")
+# if check_vertical() == "Both" or check_horizontal() == "Both" or abs(cells.count("X") - cells.count("O")) > 1:
+#     print("Impossible")
+# elif check_horizontal() is not None:
+#     print(check_horizontal())
+# elif check_vertical() is not None:
+#     print(check_vertical())
+# elif check_diagonal() is not None:
+#     print(check_diagonal())
+# elif "_" in cells:
+#     print("Game not finished")
+# else:
+#     print("Draw")
+
+while True:
+    coordinates = input("Enter coordinates: ")
+    column, row = tuple(list(coordinates.split(" ")))
+    if not column.isnumeric() and not row.isnumeric():
+        print("You should enter numbers!")
+    elif int(column) > 3 or int(row) > 3:
+        print("Coordinates should be from 1 to 3!")
+    else:
+        coord_cells = [[cells[row + (column * 3)] for row in range(3)] for column in range(3)]
+        print(coord_cells[int(column) - 1][int(row) - 1])
+        print(column, row)
+        if coord_cells[int(column) - 1][int(row) - 1] != "_":
+            print("This cell is occupied! Choose another one!")
+        else:
+            coord_cells[int(column) - 1][int(row) - 1] = "X"
+            print("---------")
+            print(f"| {coord_cells[0][0]} {coord_cells[0][1]} {coord_cells[0][2]} |")
+            print(f"| {coord_cells[1][0]} {coord_cells[1][1]} {coord_cells[1][2]} |")
+            print(f"| {coord_cells[2][0]} {coord_cells[2][1]} {coord_cells[2][2]} |")
+            print("---------")
+            break
