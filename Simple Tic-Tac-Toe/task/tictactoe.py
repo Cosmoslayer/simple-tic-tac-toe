@@ -1,81 +1,49 @@
 # write your code here
-cells = list(input("Enter cells: "))
+cells = [[" " for _ in range(3)] for _ in range(3)]
+pattern = ["X", "O"]
+counter = 0
 
 
 def create_board():
     print("---------")
-    print(f"| {cells[0]} {cells[1]} {cells[2]} |")
-    print(f"| {cells[3]} {cells[4]} {cells[5]} |")
-    print(f"| {cells[6]} {cells[7]} {cells[8]} |")
+    print(f"| {cells[0][0]} {cells[0][1]} {cells[0][2]} |")
+    print(f"| {cells[1][0]} {cells[1][1]} {cells[1][2]} |")
+    print(f"| {cells[2][0]} {cells[2][1]} {cells[2][2]} |")
     print("---------")
 
 
-def check_win(x_win, o_win):
-    if x_win == 1 and o_win == 1:
-        return "Both"
-    if x_win == 1:
+def check_win(x_win=False, o_win=False):
+    if x_win:
         return "X wins"
-    if o_win == 1:
+    if o_win:
         return "O wins"
 
 
-def check_vertical():
-    x_win = 0
-    o_win = 0
-    for current_line in range(3):
-        current_x = 0
-        current_o = 0
-        for i in range(0 + current_line, 7 + current_line, 3):
-            if cells[i] == "X":
-                current_x += 1
-                if current_x == 3:
-                    x_win = 1
-            if cells[i] == "O":
-                current_o += 1
-                if current_o == 3:
-                    o_win = 1
-    return check_win(x_win, o_win)
-
-
-def check_horizontal():
-    x_win = 0
-    o_win = 0
-    for current_line in range(3):
-        current_x = 0
-        current_o = 0
-        for i in range(current_line * 3, (current_line + 1) * 3):
-            if cells[i] == "X":
-                current_x += 1
-                if current_x == 3:
-                    x_win = 1
-            if cells[i] == "O":
-                current_o += 1
-                if current_o == 3:
-                    o_win = 1
+def check_straight(value=""):
+    x_win = False
+    o_win = False
+    for rows in range(3):
+        current_cells = []
+        for columns in range(3):
+            if value == "vertical":
+                current_cells.append(cells[columns][rows])
+            if value == "horizontal":
+                current_cells.append(cells[rows][columns])
+        if all([x == "X" for x in current_cells if len(current_cells) == 3]):
+            x_win = True
+        elif all([x == "O" for x in current_cells if len(current_cells) == 3]):
+            o_win = True
     return check_win(x_win, o_win)
 
 
 def check_diagonal():
-    if "X" == cells[0] == cells[4] == cells[8] or "X" == cells[2] == cells[4] == cells[6]:
+    if "X" == cells[0][0] == cells[1][1] == cells[2][2] or "X" == cells[0][2] == cells[1][1] == cells[2][0]:
         return "X wins"
-    if "Y" == cells[0] == cells[4] == cells[8] or "Y" == cells[2] == cells[4] == cells[6]:
-        return "Y wins"
+    if "O" == cells[0][0] == cells[1][1] == cells[2][2] or "O" == cells[0][2] == cells[1][1] == cells[2][0]:
+        return "O wins"
 
 
 create_board()
-# if check_vertical() == "Both" or check_horizontal() == "Both" or abs(cells.count("X") - cells.count("O")) > 1:
-#     print("Impossible")
-# elif check_horizontal() is not None:
-#     print(check_horizontal())
-# elif check_vertical() is not None:
-#     print(check_vertical())
-# elif check_diagonal() is not None:
-#     print(check_diagonal())
-# elif "_" in cells:
-#     print("Game not finished")
-# else:
-#     print("Draw")
-
 while True:
     coordinates = input("Enter coordinates: ")
     column, row = tuple(list(coordinates.split(" ")))
@@ -84,16 +52,21 @@ while True:
     elif int(column) > 3 or int(row) > 3:
         print("Coordinates should be from 1 to 3!")
     else:
-        coord_cells = [[cells[row + (column * 3)] for row in range(3)] for column in range(3)]
-        print(coord_cells[int(column) - 1][int(row) - 1])
-        print(column, row)
-        if coord_cells[int(column) - 1][int(row) - 1] != "_":
+        if cells[int(column) - 1][int(row) - 1] != " ":
             print("This cell is occupied! Choose another one!")
         else:
-            coord_cells[int(column) - 1][int(row) - 1] = "X"
-            print("---------")
-            print(f"| {coord_cells[0][0]} {coord_cells[0][1]} {coord_cells[0][2]} |")
-            print(f"| {coord_cells[1][0]} {coord_cells[1][1]} {coord_cells[1][2]} |")
-            print(f"| {coord_cells[2][0]} {coord_cells[2][1]} {coord_cells[2][2]} |")
-            print("---------")
-            break
+            cells[int(column) - 1][int(row) - 1] = pattern[counter % 2]
+            create_board()
+            if check_straight("horizontal") is not None:
+                print(check_straight())
+                break
+            elif check_straight("vertical") is not None:
+                print(check_straight())
+                break
+            elif check_diagonal() is not None:
+                print(check_diagonal())
+                break
+            elif not any(" " in sublist for sublist in cells):
+                print("Draw")
+                break
+            counter += 1
