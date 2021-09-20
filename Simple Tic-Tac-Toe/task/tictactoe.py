@@ -12,7 +12,7 @@ def create_board():
     print("---------")
 
 
-def check_win(x_win=False, o_win=False):
+def check_win(x_win, o_win):
     if x_win:
         return "X wins"
     if o_win:
@@ -37,10 +37,13 @@ def check_straight(value=""):
 
 
 def check_diagonal():
+    x_win = False
+    o_win = False
     if "X" == cells[0][0] == cells[1][1] == cells[2][2] or "X" == cells[0][2] == cells[1][1] == cells[2][0]:
-        return "X wins"
+        x_win = True
     if "O" == cells[0][0] == cells[1][1] == cells[2][2] or "O" == cells[0][2] == cells[1][1] == cells[2][0]:
-        return "O wins"
+        o_win = True
+    return check_win(x_win, o_win)
 
 
 create_board()
@@ -52,18 +55,19 @@ while True:
     elif int(column) > 3 or int(row) > 3:
         print("Coordinates should be from 1 to 3!")
     else:
-        if cells[int(column) - 1][int(row) - 1] != " ":
+        if cells[int(column) - 1][int(row) - 1] in pattern:
             print("This cell is occupied! Choose another one!")
         else:
-            cells[int(column) - 1][int(row) - 1] = pattern[counter % 2]
+            current_pattern = pattern[counter % 2]
+            cells[int(column) - 1][int(row) - 1] = current_pattern
             create_board()
-            if check_straight("horizontal") is not None:
-                print(check_straight())
+            if check_straight("horizontal"):
+                print(check_straight("horizontal"))
                 break
-            elif check_straight("vertical") is not None:
-                print(check_straight())
+            elif check_straight("vertical"):
+                print(check_straight("vertical"))
                 break
-            elif check_diagonal() is not None:
+            elif check_diagonal():
                 print(check_diagonal())
                 break
             elif not any(" " in sublist for sublist in cells):
